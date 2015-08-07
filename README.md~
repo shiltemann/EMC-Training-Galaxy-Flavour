@@ -79,7 +79,7 @@ ADD ./data-libraries/RNASeq_Basic /home/galaxy/EMCtraining/datalibraries/RNASeq_
 
 ## INDEXES - configure reference data for tools
 ADD ./install_reference_data_bowtie2_hg19_indexes.sh /home/galaxy/EMCtraining/installscripts/
-ADD ./bowtie2_indices.loc /galaxy-central/tool-data/toolshed.g2.bx.psu.edu/repos/devteam/tophat2/6202ec8aab61/
+ADD ./bowtie2_indices.loc /galaxy-central/tool-data/
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
