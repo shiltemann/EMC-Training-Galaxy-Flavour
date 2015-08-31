@@ -59,12 +59,16 @@ RUN mkdir /etc/ssl/private-copy; mv /etc/ssl/private/* /etc/ssl/private-copy/; r
 
 
 # install rsync and bioblend
-RUN apt-get -qq update && apt-get --no-install-recommends -y install rsync
+RUN apt-get -qq update && apt-get --no-install-recommends -y install rsync bedtools
 RUN sudo pip install bioblend
 
 # fix for OperationalError: (psycopg2.OperationalError) FATAL:  the database system is starting up
 ADD install_repo_wrapper.sh /usr/bin/install-repository
 RUN chmod a+x /usr/bin/install-repository
+
+
+
+#len_file_path = tool-data/shared/ucsc/chrom
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,10 +99,8 @@ RUN install-repository \
     "--url https://toolshed.g2.bx.psu.edu/ -o nilesh --name sickle --panel-section-name RNASeq" \
     "--url https://toolshed.g2.bx.psu.edu/ -o yhoogstrate --name featurecounts --panel-section-name RNASeq" \
     "--url https://toolshed.g2.bx.psu.edu/ -o iuc --name rgrnastar --panel-section-name RNASeq" \
-    "--url https://testtoolshed.g2.bx.psu.edu/ -o yhoogstrate --name edger_with_design_matrix --panel-section-name RNASeq" \
+    "--url https://toolshed.g2.bx.psu.edu/ -o yhoogstrate --name edger_with_design_matrix --panel-section-name RNASeq" \
     "--url https://toolshed.g2.bx.psu.edu/ -o devteam --name tophat2 --panel-section-name RNASeq" 
-
-    
 
     
 ## DATA LIBRARIES - copy data libraries to /home/galaxy/datalibraries/
@@ -107,8 +109,9 @@ ADD ./data-libraries/RNASeq_Basic /home/galaxy/EMCtraining/datalibraries/RNASeq_
 
 ## INDEXES - configure reference data for tools TODO: fix revision in toolshed install or not hardcode in locfile location below
 ADD ./install_reference_data_bowtie2_hg19_indexes.sh /home/galaxy/EMCtraining/installscripts/
-#ADD ./bowtie2_indices.loc /galaxy-central/tool-data/
 ADD ./bowtie2_indices.loc /galaxy-central/tool-data/toolshed.g2.bx.psu.edu/repos/devteam/tophat2/6202ec8aab61/
+
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #  END of Training Module: RNASeq Basic
@@ -128,7 +131,15 @@ ADD ./bowtie2_indices.loc /galaxy-central/tool-data/toolshed.g2.bx.psu.edu/repos
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
+### configure Trackster
+ADD ./install_reference_data_trackster_hg19.sh /home/galaxy/EMCtraining/installscripts/
+ADD ./twobit.loc /galaxy-central/tool-data/
+ENV GALAXY_CONFIG_LEN_FILE_PATH=tool-data/shared/ucsc/chrom
+RUN mkdir /galaxy-central/tool-data/shared/ucsc/chrom/ 
+ADD ./hg19.len /galaxy-central/tool-data/shared/ucsc/chrom/
+ADD ./binaries/bedGraphToBigWig /usr/local/sbin/
+ADD ./binaries/faToTwoBit /usr/local/sbin/
+ADD ./binaries/wigToBigWig /usr/local/sbin/
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,6 +149,7 @@ ADD ./bowtie2_indices.loc /galaxy-central/tool-data/toolshed.g2.bx.psu.edu/repos
 
 # set allow_library_libary_path_paste to true for data library creation
 ENV GALAXY_CONFIG_ALLOW_LIBRARY_PATH_PASTE=True
+ENV GALAXY_CONFIG_LIBRARY_IMPORT_DIR=/home/galaxy/EMCtraining/datalibraries
 
 # add scripts for creating data libraries and running all reference data install script
 ADD ./libuploadgalaxy.py /home/galaxy/EMCtraining/installscripts/
@@ -150,7 +162,7 @@ RUN chmod +x /usr/bin/startup
 
 # 
 # create the data libraries
-RUN bash /home/galaxy/EMCtraining/installscripts/install_datalibraries_wrapper.sh
+#RUN bash /home/galaxy/EMCtraining/installscripts/install_datalibraries_wrapper.sh
 
 
 ###########################################

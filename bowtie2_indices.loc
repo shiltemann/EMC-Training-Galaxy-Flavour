@@ -35,4 +35,4 @@
 #dm3	dm3		D. melanogaster (dm3)	/depot/data2/galaxy/mm10/bowtie2/dm3
 #
 #
-hg19	hg19	Human (hg19)	/export/indexes/hg19/bowtie2_index
+hg19	hg19	Human (hg19)	/export/indexes/hg19/bowtie2_index/hg19

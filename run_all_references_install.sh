@@ -15,9 +15,14 @@
 # When /export/folder is mounted to a host location, different containers can share reference data and
 # installation will only occurr on first start of image
 #
+#echo "running datalibrary upload"
+#whoami
+#chmod a+rwx /home/galaxy/EMCtraining/installscripts/libuploadgalaxy.py
+#python /home/galaxy/EMCtraining/installscripts/libuploadgalaxy.py 2>/home/galaxy/log2 1>/home/galaxy/log2
+
 installscriptdir="/home/galaxy/EMCtraining/installscripts/"
 for installscript in ${installscriptdir}/install_reference_data_*.sh
 do
     echo "running reference data install script: $installscript"
-    bash $installscript
+    bash $installscript &
 done

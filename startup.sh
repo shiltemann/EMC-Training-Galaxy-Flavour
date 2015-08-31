@@ -8,8 +8,9 @@ umount /var/lib/docker
 python /usr/local/bin/export_user_files.py $PG_DATA_DIR_DEFAULT
 
 
-# EMC TRAINING:  install reference data if not yet present
-bash /home/galaxy/EMCtraining/installscripts/run_all_references_install.sh &
+# EMC TRAINING:  install reference data if not yet present, and upload the data libraries
+bash /home/galaxy/EMCtraining/installscripts/run_all_references_install.sh  &
+python /home/galaxy/EMCtraining/installscripts/libuploadgalaxy.py 2>/home/galaxy/liblog &
 
 
 # Configure SLURM with runtime hostname.

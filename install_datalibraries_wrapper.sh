@@ -42,6 +42,9 @@ sleep 10
 echo "installing data libraries"
 python /home/galaxy/EMCtraining/installscripts/libuploadgalaxy.py
 
+# give upload time to finish TODO: detect finish
+sleep 180
+
 # stop everything
 sudo -E -u galaxy ./run.sh --stop-daemon --log-file=$install_log --pid-file=galaxy_install.pid
 rm $install_log
